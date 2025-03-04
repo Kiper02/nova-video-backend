@@ -24,6 +24,7 @@ import { AuthModule } from 'src/modules/auth/auth.module';
     RedisModule,
     UserModule,
     AuthModule,
+    
   ],
 })
 export class CoreModule {}
