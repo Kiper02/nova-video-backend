@@ -33,6 +33,13 @@ export class UserService {
                 displayName: username
             }
         })
+
+        await this.prismaService.channel.create({
+            data: {
+                name: user.username,
+                userId: user.id
+            }
+        })
         return user
     }
 
