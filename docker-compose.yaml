@@ -1,0 +1,38 @@
+version: latest
+
+services:
+  db:
+    container_name: nova-video-db
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_HOST=${DB_HOST}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    ports:
+     - 3308:${DB_PORT}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+    networks:
+      - nova-video-backend
+  redis:
+    container_name: redis
+    image: redis:5.0
+    restart: always
+    ports:
+      - 6379:6379
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    networks:
+      - nova-video-backend
+
+volumes:
+  mysql_data:
+  redis_data:
+  
+networks:
+  nova-video-backend:

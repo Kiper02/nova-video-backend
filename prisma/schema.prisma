@@ -1,0 +1,170 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid())
+
+  email String @unique
+  password String
+  username String @unique
+  displayName String @map("display_name")
+  avatar String?
+
+  channel Channel?
+  comments Comment[]
+  history UserHistory[]
+  favorites UserFavorite[]
+  videoStatistic VideoStatistic[]
+  userPlaylists UserPlaylist[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("users")
+}
+
+model UserHistory {
+  id String @id @default(uuid())
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  video Video @relation(fields: [videoId], references: [id])
+  videoId String @map("video_id")
+
+  @@unique([userId, videoId])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("user_history")
+}
+
+model UserFavorite {
+  id String @id @default(uuid())
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  video Video @relation(fields: [videoId], references: [id])
+  videoId String @map("video_id")
+
+  @@unique([userId, videoId])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("user_favorite")
+}
+
+model VideoStatistic {
+  id String @id @default(uuid())
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  video Video @relation(fields: [videoId], references: [id])
+  videoId String @map("video_id")
+
+  watchTime Int @default(0) @map("watch_time")
+  lastWatchedAt DateTime? @map("last_watched_at")
+  isLiked Boolean @default(false) @map("is_liked")
+  isDisliked Boolean @default(false) @map("is_disliked")
+
+  @@unique([userId, videoId])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("video_statistics")
+}
+
+
+model Channel {
+  id String @id @default(uuid())
+
+  name String
+  banner String?
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @unique @map("user_id")
+
+  playlists Playlist[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("channels")
+}
+
+model Playlist {
+  id String @id @default(uuid())
+  
+  name String
+
+  channel Channel @relation(fields: [channelId], references: [id])
+  channelId String @map("channel_id")
+
+  videos Video[]
+  userPlaylists UserPlaylist[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("playlists")
+}
+
+model UserPlaylist {
+  id String @id @default(uuid())
+  
+  name String
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  playlist Playlist @relation(fields: [playlistId], references: [id])
+  playlistId String @map("playlist_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("users_playlists")
+}
+
+model Video {
+  id String @id @default(uuid())
+  
+  name String
+  url String
+  description String?
+
+  numberOfLikes Int @default(0) @map("number_of_likes")
+  numberOfDislikes Int @default(0) @map("number_of_dislikes")
+  numberOfComments Int @default(0) @map("number_of_comments")
+
+  playlist Playlist @relation(fields: [playlistId], references: [id])
+  playlistId String @map("playlist_id")
+
+  comments Comment[]
+  viewedBy UserHistory[]
+  favoriteBy UserFavorite[]
+  videoStatistics VideoStatistic[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("videos")
+}
+
+model Comment {
+  id String @id @default(uuid())
+
+  content String
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+  video Video @relation(fields: [videoId], references: [id])
+  videoId String @map("video_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("comments")
+}
