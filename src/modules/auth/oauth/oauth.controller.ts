@@ -1,4 +1,4 @@
-import { Controller, Param, Post, Request } from '@nestjs/common';
+import { Controller, Post, Query, Request } from '@nestjs/common';
 import { OauthService } from './oauth.service';
 import { Request as RequestType } from 'express';
 
@@ -6,9 +6,9 @@ import { Request as RequestType } from 'express';
 export class OauthController {
   constructor(private readonly oauthService: OauthService) {}
 
-  @Post('code/:code')
+  @Post('callback')
   public async code(
-    @Param("code") code: string,
+    @Query("code") code: string,
     @Request() req: RequestType
   ) {
     return await this.oauthService.code(code, req)
