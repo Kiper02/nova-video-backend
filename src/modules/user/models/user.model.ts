@@ -22,6 +22,12 @@ export class UserModel implements User {
     @Field(() => String, {nullable: true})
     public avatar: string;
 
+    @Field(() => Boolean)
+    public isEmailVerified: boolean;
+
+    @Field(() => Boolean)
+    public isVerified: boolean;
+
     @Field(() => Date)
     public createdAt: Date;
     

@@ -13,6 +13,7 @@ input LoginInput {
 }
 
 type Mutation {
+  emailVerify(data: VerificationInput!): Boolean!
   login(data: LoginInput!): Boolean!
   logout: Boolean!
   register(data: RegisterInput!): Boolean!
@@ -34,7 +35,13 @@ type UserModel {
   displayName: String!
   email: String!
   id: ID!
+  isEmailVerified: Boolean!
+  isVerified: Boolean!
   password: String!
   updatedAt: DateTime!
   username: String!
+}
+
+input VerificationInput {
+  token: String!
 }

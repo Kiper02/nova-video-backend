@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
-import { UserService } from '../user/user.service';
-import { OuathModule } from './ouath/ouath.module';
 import { OauthModule } from './oauth/oauth.module';
+import { VerificationModule } from './verification/verification.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
-  providers: [AuthResolver, AuthService, UserService],
-  imports: [OuathModule, OauthModule],
+  imports: [OauthModule, VerificationModule, UserModule, VerificationModule],
+  providers: [AuthResolver, AuthService],
 })
 export class AuthModule {}

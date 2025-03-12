@@ -7,6 +7,11 @@ import { getGraphqlConfig } from './config/graphql.config';
 import { RedisModule } from './redis/redis.module';
 import { UserModule } from 'src/modules/user/user.module';
 import { AuthModule } from 'src/modules/auth/auth.module';
+import { ChannelModule } from 'src/modules/channel/channel.module';
+import { StorageModule } from 'src/modules/libs/storage/storage.module'
+import { MailModule } from 'src/modules/libs/mail/mail.module';
+import { VerificationModule } from 'src/modules/auth/verification/verification.module';
+import { OauthModule } from 'src/modules/auth/oauth/oauth.module';
 
 @Module({
   imports: [
@@ -24,7 +29,11 @@ import { AuthModule } from 'src/modules/auth/auth.module';
     RedisModule,
     UserModule,
     AuthModule,
-    
+    OauthModule,
+    ChannelModule,
+    StorageModule,
+    MailModule,
+    VerificationModule,
   ],
 })
 export class CoreModule {}

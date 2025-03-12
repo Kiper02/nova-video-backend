@@ -11,9 +11,8 @@ export class AuthResolver {
   @Mutation(() => Boolean, { name: 'register' })
   public async register(
     @Args('data') input: RegisterInput,
-    @Context() { req }: GqlContext,
   ) {
-    return await this.authService.register(req, input);
+    return await this.authService.register(input);
   }
 
   @Mutation(() => Boolean, { name: 'login' })

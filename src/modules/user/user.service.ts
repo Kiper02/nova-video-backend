@@ -2,11 +2,13 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import type { UserInput } from './inputs/user.input';
 import { hash } from 'argon2';
+import { ChannelService } from '../channel/channel.service';
 
 @Injectable()
 export class UserService {
     public constructor(
         private readonly prismaService: PrismaService,
+        private readonly channelService: ChannelService,
     ) {}
 
     public async create(input: UserInput) {
@@ -33,13 +35,7 @@ export class UserService {
                 displayName: username
             }
         })
-
-        await this.prismaService.channel.create({
-            data: {
-                name: user.username,
-                userId: user.id
-            }
-        })
+        await this.channelService.create(user.id, user.username);
         return user
     }
 

@@ -8,19 +8,26 @@ import { LoginInput } from './inputs/login.input';
 import { ConfigService } from '@nestjs/config';
 import { RegisterInput } from './inputs/register.input';
 import { verify } from 'argon2';
+import { v4 } from 'uuid';
+import { MailService } from '../libs/mail/mail.service';
+import generateToken from 'src/shared/utils/generate-token.util';
+import { TokenType } from '@prisma/client';
+import { VerificationService } from './verification/verification.service';
 
 @Injectable()
 export class AuthService {
     public constructor(
         private readonly prismaService: PrismaService,
         private readonly userService: UserService,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly verificationService: VerificationService,
+
     ) {}
 
 
-    public async register(req: Request, input: RegisterInput) {
+    public async register(input: RegisterInput) {
         const user = await this.userService.create(input);
-        await saveSession(req, user);
+        await this.verificationService.sendVerificationToken(user);
         return true;
     }
 
@@ -38,6 +45,10 @@ export class AuthService {
         const isValidPassword = await verify(user.password, input.password);
         if (!isValidPassword) {
             throw new BadRequestException("Неверный пароль");
+        }
+
+        if(!user.isEmailVerified) {
+            throw new BadRequestException("Аккаунт не верифицирован. Пожалуйста, проверьте свою почту для подтверждения");
         }
     
         await saveSession(req, user);
