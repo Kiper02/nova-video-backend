@@ -35,10 +35,12 @@ export class PlaylistsService {
         return true;
     }
 
-    public async findByChannel(channelId: string) {
+    public async findByUser(userId: string) {
         const playlists = await this.prismaService.playlist.findMany({
             where: {
-                channelId
+                channel: {
+                    userId
+                }
             }
         })
 

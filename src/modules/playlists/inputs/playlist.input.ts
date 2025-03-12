@@ -12,5 +12,6 @@ export class PlaylistInput {
 
     @IsNotEmpty()
     @IsString()
+    @Field(() => String)
     public channelId: string;
 }

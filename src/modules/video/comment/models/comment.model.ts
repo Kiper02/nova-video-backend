@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Comment } from '@prisma/client';
+import { UserModel } from './../../../user/models/user.model'
 
 @ObjectType()
 export class CommentModel implements Comment {
@@ -23,16 +24,4 @@ export class CommentModel implements Comment {
 
     @Field(() => Date)
     public updatedAt: Date;
-}
-
-@ObjectType()
-export class UserModel {
-    @Field(() => ID)
-    public id: string;
-
-    @Field(() => String)
-    public username: string;
-
-    @Field(() => String)
-    public avatar: string;
 }

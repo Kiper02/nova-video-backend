@@ -2,6 +2,27 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input ChannelInput {
+  banner: Upload!
+  name: String!
+}
+
+type ChannelModel {
+  banner: String!
+  name: String!
+  playlists: [PlaylistModel!]!
+}
+
+type CommentModel {
+  content: String!
+  createdAt: DateTime!
+  id: ID!
+  updatedAt: DateTime!
+  user: UserModel!
+  userId: String!
+  videoId: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -13,14 +34,33 @@ input LoginInput {
 }
 
 type Mutation {
+  addPlaylistToUser(data: String!): Boolean!
+  addVideo(data: VideoInput!): Boolean!
+  createPlaylist(data: PlaylistInput!): Boolean!
+  deleteVideo(data: String!): Boolean!
+  deleteVideoByPlaylistId(data: String!): Boolean!
   emailVerify(data: VerificationInput!): Boolean!
   login(data: LoginInput!): Boolean!
   logout: Boolean!
   register(data: RegisterInput!): Boolean!
+  updateChannel(data: ChannelInput!): ChannelModel!
+}
+
+input PlaylistInput {
+  channelId: String!
+  name: String!
+}
+
+type PlaylistModel {
+  id: String!
+  name: String!
+  video: [VideoModel!]!
 }
 
 type Query {
   findAllUsers: [UserModel!]!
+  findByUser: [PlaylistModel!]!
+  findChannelByUser: ChannelModel!
 }
 
 input RegisterInput {
@@ -28,6 +68,9 @@ input RegisterInput {
   password: String!
   username: String!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 type UserModel {
   avatar: String
@@ -44,4 +87,25 @@ type UserModel {
 
 input VerificationInput {
   token: String!
+}
+
+input VideoInput {
+  description: String!
+  name: String!
+  playlistId: String!
+  video: Upload!
+}
+
+type VideoModel {
+  comments: [CommentModel!]!
+  createdAt: DateTime!
+  description: String!
+  fileName: String!
+  id: ID!
+  name: String!
+  numberOfComments: Float!
+  numberOfDislikes: Float!
+  numberOfLikes: Float!
+  playlistId: String!
+  updatedAt: DateTime!
 }

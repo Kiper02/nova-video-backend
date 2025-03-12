@@ -10,7 +10,7 @@ export class PlaylistsResolver {
   public constructor(private readonly playlistsService: PlaylistsService) {}
 
   @Authorization()
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, {name: 'createPlaylist'})
   public async create(
     @Args('data') input: PlaylistInput,
     @Authorized('id') userId: string,
@@ -18,11 +18,12 @@ export class PlaylistsResolver {
     return await this.playlistsService.create(userId, input);
   }
 
-  @Query(() => PlaylistModel, {name: 'findByChannel'})
-  public async findByChannel(
-    @Args('data') channelId: string
+  @Authorization()
+  @Query(() => [PlaylistModel], {name: 'findByUser'})
+  public async findByUser(
+    @Authorized('id') userId: string
   ) {
-    return await this.playlistsService.findByChannel(channelId);
+    return await this.playlistsService.findByUser(userId);
   }
 
   @Authorization()

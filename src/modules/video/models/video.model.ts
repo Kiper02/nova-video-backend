@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Comment, Video } from "@prisma/client";
+import { Video } from "@prisma/client";
+import { CommentModel } from "../comment/models/comment.model";
 
 @ObjectType()
 export class VideoModel implements Video{
@@ -10,7 +11,7 @@ export class VideoModel implements Video{
     public name: string
 
     @Field(() => String)
-    public url: string
+    public fileName: string
 
     @Field(() => String)
     public description: string
@@ -27,8 +28,8 @@ export class VideoModel implements Video{
     @Field(() => String)
     public playlistId: string;
 
-    @Field(() => [Comment])
-    public comments: Comment[]
+    @Field(() => [CommentModel])
+    public comments: CommentModel[]
 
     @Field(() => Date)
     public createdAt: Date;

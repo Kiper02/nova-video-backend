@@ -12,6 +12,9 @@ import { StorageModule } from 'src/modules/libs/storage/storage.module'
 import { MailModule } from 'src/modules/libs/mail/mail.module';
 import { VerificationModule } from 'src/modules/auth/verification/verification.module';
 import { OauthModule } from 'src/modules/auth/oauth/oauth.module';
+import { PlaylistsModule } from 'src/modules/playlists/playlists.module';
+import { CommentModule } from 'src/modules/video/comment/comment.module';
+import { VideoModule } from 'src/modules/video/video.module';
 
 @Module({
   imports: [
@@ -31,6 +34,9 @@ import { OauthModule } from 'src/modules/auth/oauth/oauth.module';
     AuthModule,
     OauthModule,
     ChannelModule,
+    PlaylistsModule,
+    VideoModule,
+    CommentModule,
     StorageModule,
     MailModule,
     VerificationModule,
